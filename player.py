@@ -1,6 +1,5 @@
 import pygame as pg
 from math import pi, atan2
-from settings import WIDTH, HEIGHT
 
 class Player:
     def __init__(self, display, x, y):
