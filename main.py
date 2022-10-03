@@ -21,7 +21,7 @@ class Game:
             minput = pg.mouse.get_pressed()
 
             screen.fill("darkgreen")
-            self.level.update(keys, mpos, minput)
+            self.level.update(keys, mpos, minput, events)
 
             pg.display.flip()
             clock.tick(60)

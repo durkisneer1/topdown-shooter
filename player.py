@@ -6,21 +6,32 @@ class Player:
     def __init__(self, display, x, y):
         self.display = display
 
-        self.surf = pg.transform.rotate(pg.image.load("assets/player.png").convert_alpha(), -90)
+        self.surf = pg.image.load("assets/player.png").convert_alpha()
         self.rect = self.surf.get_rect()
         self.deg = 0
 
         self.pos = pg.Vector2(x, y)
         self.speed = 7
+        self.offset = 50
 
     def rotation(self, mpos):
         adj = mpos[0] - self.pos.x
         opp = mpos[1] - self.pos.y
         rad = atan2(adj, opp)
-        deg = rad * (180 / pi)
+        deg = rad * (180 / pi) - 90
 
         self.new_surf = pg.transform.rotate(self.surf, deg)
         self.new_rect = self.new_surf.get_rect(center=self.pos)
+
+    def keep_in_frame(self):
+        if self.pos.x > WIDTH - self.offset:
+            self.pos.x = WIDTH - self.offset
+        elif self.pos.x < self.offset:
+            self.pos.x = self.offset
+        if self.pos.y > HEIGHT - self.offset:
+            self.pos.y = HEIGHT - self.offset
+        elif self.pos.y < self.offset:
+            self.pos.y = self.offset
 
     def movement(self, keys):
         if keys[pg.K_w]: self.pos.y -= self.speed
@@ -31,6 +42,7 @@ class Player:
     def update(self, keys, mpos):
         self.rotation(mpos)
         self.movement(keys)
+        self.keep_in_frame()
         self.display.blit(self.new_surf, self.new_rect)
 
 class Bullet(pg.sprite.Sprite):
@@ -39,7 +51,7 @@ class Bullet(pg.sprite.Sprite):
         self.display = display
 
         self.pos = player_pos
-        self.speed = 12
+        self.speed = 20
         self.rotation(mpos)
         self.direction(mpos)
 
