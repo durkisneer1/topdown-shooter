@@ -1,9 +1,9 @@
 from settings import *
-from player import Player
+from level import Level
 
 class Game:
     def __init__(self):
-        self.player = Player(screen, WIDTH / 2, HEIGHT / 2)
+        self.level = Level(screen)
 
     def run(self):
         run = True
@@ -18,9 +18,10 @@ class Game:
 
             keys = pg.key.get_pressed()
             mpos = pg.mouse.get_pos()
+            minput = pg.mouse.get_pressed()
 
             screen.fill("darkgreen")
-            self.player.update(keys, mpos)
+            self.level.update(keys, mpos, minput)
 
             pg.display.flip()
             clock.tick(60)
