@@ -11,6 +11,8 @@ class Zombie(pg.sprite.Sprite):
         
         self.surf_list = import_folder("assets/zombie", 0.5)
         self.rect = None
+        self.mask = None
+        self.direction = pg.Vector2()
 
         edge = randint(0, 3)
         if edge == 0:
@@ -22,7 +24,7 @@ class Zombie(pg.sprite.Sprite):
         elif edge == 3:
             self.pos = pg.Vector2(randint(0, WIDTH), HEIGHT)
 
-        self.slowdown = 33
+        self.speed = 5
         self.current_frame = 0
         self.anim_speed = 0.3
 
@@ -36,21 +38,18 @@ class Zombie(pg.sprite.Sprite):
         self.rect = self.surf.get_rect()
 
     def movement(self, player_pos):
+        if self.direction.magnitude() != 0:
+            self.direction = self.direction.normalize()
+        self.pos += self.direction * self.speed
+
+        y_diff = player_pos.y - self.pos.y
+        x_diff = player_pos.x - self.pos.x
+        if -50 < y_diff < 50 and -50 < x_diff < 50:
+            pass
+        else:
+            self.direction.y = player_pos.y - self.pos.y
+            self.direction.x = player_pos.x - self.pos.x
         self.rect.center = self.pos
-
-        x_vel = player_pos.x - self.pos.x
-        y_vel = player_pos.y - self.pos.y
-        if x_vel > 100:
-            x_vel = 100
-        elif x_vel < -100:
-            x_vel = -100
-        if y_vel > 100:
-            y_vel = 100
-        elif y_vel < -100:
-            y_vel = -100
-
-        self.pos.x += x_vel / self.slowdown
-        self.pos.y += y_vel / self.slowdown
     
     def rotation(self, player_pos):
         adj = player_pos.x - self.pos.x
@@ -59,6 +58,7 @@ class Zombie(pg.sprite.Sprite):
         deg = rad * (180 / pi) - 90
 
         self.new_surf = pg.transform.rotate(self.surf, deg)
+        self.mask = pg.mask.from_surface(self.new_surf)
         self.rect = self.new_surf.get_rect(center=self.pos)
 
     def update(self, player_pos):

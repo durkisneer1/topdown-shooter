@@ -20,7 +20,7 @@ class Level:
     def shooting(self, minput, mpos):
         if minput[0]:
             self.bullet_delay += 1
-            if self.bullet_delay >= 20:
+            if self.bullet_delay >= 15:
                 Bullet(self.display, self.bullet_group, mpos, self.player.pos.copy())
                 self.bullet_delay = 0
 
@@ -33,9 +33,11 @@ class Level:
         for blt in self.bullet_group:
             for zmb in self.zombie_group:
                 if zmb.rect is not None:
-                    if blt.rect.colliderect(zmb.rect):
+                    if (blt.rect.colliderect(zmb.rect) and
+                    pg.sprite.collide_mask(blt, zmb)):
                         zmb.kill()
                         blt.kill()
+                        break
 
     def update(self, keys, mpos, minput, events):
         self.shooting(minput, mpos)

@@ -11,6 +11,7 @@ class Player:
         self.deg = 0
 
         self.pos = pg.Vector2(x, y)
+        self.direction = pg.Vector2()
         self.speed = 7
         self.offset = 50
 
@@ -34,10 +35,19 @@ class Player:
             self.pos.y = self.offset
 
     def movement(self, keys):
-        if keys[pg.K_w]: self.pos.y -= self.speed
-        if keys[pg.K_s]: self.pos.y += self.speed
-        if keys[pg.K_a]: self.pos.x -= self.speed
-        if keys[pg.K_d]: self.pos.x += self.speed
+        if self.direction.magnitude() != 0:
+            self.direction = self.direction.normalize()
+        self.pos += self.direction * self.speed
+
+        if keys[pg.K_w]: self.direction.y = -1
+        elif keys[pg.K_s]: self.direction.y = 1
+        else:
+            self.direction.y = 0
+
+        if keys[pg.K_a]: self.direction.x = -1
+        elif keys[pg.K_d]: self.direction.x = 1
+        else:
+            self.direction.x = 0
 
     def update(self, keys, mpos):
         self.rotation(mpos)
@@ -62,6 +72,7 @@ class Bullet(pg.sprite.Sprite):
         deg = rad * (180 / pi) + 180
 
         self.surf = pg.transform.rotate(pg.image.load("assets/bullet.png").convert_alpha(), deg)
+        self.mask = pg.mask.from_surface(self.surf)
         self.rect = self.surf.get_rect(center=self.pos)
 
     def direction(self, mpos):
