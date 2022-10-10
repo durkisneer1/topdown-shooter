@@ -3,6 +3,7 @@ from player import Player, Bullet
 from enemies import Zombie
 from settings import WIDTH, HEIGHT
 
+
 class Level:
     def __init__(self, display):
         self.display = display

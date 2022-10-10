@@ -4,14 +4,17 @@ from math import pi, atan2
 from support import import_folder
 from settings import WIDTH, HEIGHT
 
+
 class Zombie(pg.sprite.Sprite):
     def __init__(self, display, group):
         super().__init__(group)
         self.display = display
         
         self.surf_list = import_folder("assets/zombie", 0.5)
+        self.surf = None
         self.rect = None
         self.mask = None
+        self.new_surf = None
         self.direction = pg.Vector2()
 
         edge = randint(0, 3)
