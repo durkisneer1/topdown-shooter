@@ -1,6 +1,6 @@
 import pygame as pg
 from math import pi, atan2, cos, sin
-from settings import WIDTH, HEIGHT
+from settings import *
 
 
 class Player:
@@ -77,6 +77,7 @@ class Bullet(pg.sprite.Sprite):
         self.speed = 20
         self.rotation(m_pos)
         self.direction(m_pos)
+        self.offset_local()
 
     def rotation(self, m_pos):
         adj = m_pos[0] - self.pos[0]
@@ -88,10 +89,17 @@ class Bullet(pg.sprite.Sprite):
         self.mask = pg.mask.from_surface(self.surf)
         self.rect = self.surf.get_rect(center=self.pos)
 
-    def direction(self, mpos):
-        degrees = atan2((self.pos.y - mpos[1]), (self.pos.x - mpos[0]))
+    def direction(self, m_pos):
+        degrees = atan2((self.pos.y - m_pos[1]), (self.pos.x - m_pos[0]))
         self.x_vel = cos(degrees) * self.speed
         self.y_vel = sin(degrees) * self.speed
+
+    def offset_local(self):
+        offset = pg.Vector2(15, 0)
+        local_x_vec = pg.Vector2(self.y_vel, -self.x_vel).normalize()
+        local_y_vec = pg.Vector2(self.x_vel, self.y_vel).normalize()
+
+        self.pos += (local_x_vec * offset.x) + (local_y_vec * offset.y)
 
     def movement(self):
         self.pos.x -= self.x_vel

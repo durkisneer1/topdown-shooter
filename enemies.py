@@ -2,7 +2,7 @@ import pygame as pg
 from random import randint
 from math import pi, atan2
 from support import import_folder
-from settings import WIDTH, HEIGHT
+from settings import *
 
 
 class Zombie(pg.sprite.Sprite):

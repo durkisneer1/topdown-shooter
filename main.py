@@ -1,10 +1,15 @@
+import pygame as pg
 from settings import *
 from level import Level
 
 
 class Game:
     def __init__(self):
-        self.level = Level(screen)
+        self.screen = pg.display.set_mode((WIDTH, HEIGHT))
+        pg.display.set_caption("Zombie Gunner")
+        self.clock = pg.time.Clock()
+
+        self.level = Level(self.screen)
 
     def run(self):
         run = True
@@ -21,11 +26,11 @@ class Game:
             m_pos = pg.mouse.get_pos()
             m_input = pg.mouse.get_pressed()
 
-            screen.fill("darkgreen")
+            self.screen.fill("darkgreen")
             self.level.update(keys, m_pos, m_input, events)
 
             pg.display.flip()
-            clock.tick(60)
+            self.clock.tick(60)
 
 
 if __name__ == "__main__":
