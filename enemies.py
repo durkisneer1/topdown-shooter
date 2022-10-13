@@ -6,11 +6,11 @@ from settings import *
 
 
 class Zombie(pg.sprite.Sprite):
-    def __init__(self, display, group):
+    def __init__(self, display, group, surf_list):
         super().__init__(group)
         self.display = display
         
-        self.surf_list = import_folder("assets/zombie", 0.5)
+        self.surf_list = surf_list
         self.surf = None
         self.rect = None
         self.mask = None
@@ -29,7 +29,7 @@ class Zombie(pg.sprite.Sprite):
 
         self.speed = 5
         self.current_frame = 0
-        self.anim_speed = 0.3
+        self.anim_speed = 0.2
 
     def zombie_anim(self):
         frames = self.surf_list

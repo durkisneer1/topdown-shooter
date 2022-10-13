@@ -64,7 +64,7 @@ class Player:
 
 
 class Bullet(pg.sprite.Sprite):
-    def __init__(self, display, group, m_pos, player_pos):
+    def __init__(self, display, group, m_pos, player_pos, image):
         super().__init__(group)
         self.display = display
         self.surf = None
@@ -75,17 +75,17 @@ class Bullet(pg.sprite.Sprite):
         self.y_vel = None
         self.pos = player_pos
         self.speed = 20
-        self.rotation(m_pos)
+        self.rotation(m_pos, image)
         self.direction(m_pos)
         self.offset_local()
 
-    def rotation(self, m_pos):
+    def rotation(self, m_pos, image):
         adj = m_pos[0] - self.pos[0]
         opp = m_pos[1] - self.pos[1]
         rad = atan2(adj, opp)
         deg = rad * (180 / pi) + 180
 
-        self.surf = pg.transform.rotate(pg.image.load("assets/bullet.png").convert_alpha(), deg)
+        self.surf = pg.transform.rotate(image, deg)
         self.mask = pg.mask.from_surface(self.surf)
         self.rect = self.surf.get_rect(center=self.pos)
 
@@ -95,7 +95,7 @@ class Bullet(pg.sprite.Sprite):
         self.y_vel = sin(degrees) * self.speed
 
     def offset_local(self):
-        offset = pg.Vector2(15, 0)
+        offset = pg.Vector2(15, -50)
         local_x_vec = pg.Vector2(self.y_vel, -self.x_vel).normalize()
         local_y_vec = pg.Vector2(self.x_vel, self.y_vel).normalize()
 

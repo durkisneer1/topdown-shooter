@@ -16,21 +16,17 @@ class Game:
         while run:
             events = pg.event.get()
             for ev in events:
-                if ev.type == pg.QUIT:
+                if ev.type == pg.QUIT or (ev.type == pg.KEYDOWN and ev.key == pg.K_ESCAPE):
                     run = False
-                if ev.type == pg.KEYDOWN:
-                    if ev.key == pg.K_ESCAPE:
-                        run = False
 
             keys = pg.key.get_pressed()
             m_pos = pg.mouse.get_pos()
             m_input = pg.mouse.get_pressed()
 
-            self.screen.fill("darkgreen")
             self.level.update(keys, m_pos, m_input, events)
 
             pg.display.flip()
-            self.clock.tick(60)
+            self.clock.tick(FPS)
 
 
 if __name__ == "__main__":
